@@ -1,0 +1,646 @@
+/* ==== Importação das fontes ==== */
+
+@font-face {
+    font-family: 'Akira Expanded';
+    src: url('fontes/AkiraExpandedDemo.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Creato Display */
+@font-face {
+    font-family: 'Creato Display';
+    src: url('fontes/CreatoDisplay-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Creato Display';
+    src: url('fontes/CreatoDisplay-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Creato Display';
+    src: url('fontes/CreatoDisplay-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Creato Display';
+    src: url('fontes/CreatoDisplay-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Alte Haas Grotesk — Fonte para Introdução e Descrições */
+@font-face {
+    font-family: 'Alte Haas Grotesk';
+    src: url('fontes/AlteHaasGroteskRegular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Alte Haas Grotesk';
+    src: url('fontes/AlteHaasGroteskBold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ==== Variáveis globais ==== */
+
+:root {
+    --fonte-display: 'Akira Expanded', sans-serif;       /* título principal */
+    --fonte-secundaria: 'Creato Display', sans-serif;     /* títulos dos cards */
+    --fonte-corpo: 'Alte Haas Grotesk', sans-serif;       /* texto corrido e introdução */
+    --fonte-alt: 'Alte Haas Grotesk', sans-serif;         /* descrições e rodapé */
+
+    --cor-1: #2E3480;
+    --cor-2: #0B7A3A;
+    --cor-3: #F5A800;
+    --cor-4: #DC3A24;
+
+    --altura-header: 84px;                                /* cabeçalho fixo */
+    --altura-pagina: calc(100vh - var(--altura-header));  /* 1 "página" = tela - cabeçalho */
+    --margem-pagina: clamp(24px, 5vw, 72px);
+
+    /* altura útil da página = tela - cabeçalho - padding de cima e de baixo (44px + 44px) */
+    --altura-img: calc(var(--altura-pagina) - 88px);
+}
+
+/* ==== BASE ==== */
+* {
+    box-sizing: border-box;
+}
+
+/* One scroll: cada antes / depois ocupa uma tela inteira e "encaixa" ao rolar */
+html {
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: var(--altura-header);
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--fonte-corpo);
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    color: #000000;
+    line-height: 1.6;
+}
+
+/* ==== TÍTULO / CABEÇALHO (fixo no topo) ==== */
+.titulo {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: var(--altura-header);
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0 40px;
+    font-family: var(--fonte-display);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.titulo h1 {
+    font-size: clamp(1.4rem, 4vw, 2.8rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.titulo h2 {
+    font-family: var(--fonte-secundaria);
+    font-weight: 500;
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+/* ==== DESTAQUE LETRA POR LETRA EM DESIGN ==== */
+.destaque-design {
+    display: inline-flex;
+}
+
+.destaque-design .letra {
+    -webkit-text-stroke: 1.5px #ffffff;
+    color: transparent;
+    transition: color 0.3s ease, -webkit-text-stroke 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+}
+
+.titulo h1:hover .destaque-design .letra:nth-child(1) { color: var(--cor-1); -webkit-text-stroke: 0; transform: translateY(-3px); }
+.titulo h1:hover .destaque-design .letra:nth-child(2) { color: var(--cor-2); -webkit-text-stroke: 0; transform: translateY(-3px); }
+.titulo h1:hover .destaque-design .letra:nth-child(3) { color: var(--cor-3); -webkit-text-stroke: 0; transform: translateY(-3px); }
+.titulo h1:hover .destaque-design .letra:nth-child(4) { color: var(--cor-4); -webkit-text-stroke: 0; transform: translateY(-3px); }
+.titulo h1:hover .destaque-design .letra:nth-child(5) { color: var(--cor-1); -webkit-text-stroke: 0; transform: translateY(-3px); }
+.titulo h1:hover .destaque-design .letra:nth-child(6) { color: var(--cor-2); -webkit-text-stroke: 0; transform: translateY(-3px); }
+
+/* ==== CORPO ==== */
+/* Os blocos (.introdução, .primeiraParte...) só agrupam; quem vira "página" são os antes/depois */
+.corpo {
+    margin: 0;
+    padding: 0;
+}
+
+.corpo > div {
+    display: block;
+    margin: 0;
+}
+
+.primeiraParte { --cor-destaque: var(--cor-1); }
+.segundaParte  { --cor-destaque: var(--cor-2); }
+.terceiraParte { --cor-destaque: var(--cor-3); }
+.quartaParte   { --cor-destaque: var(--cor-4); }
+
+/* ==== CAIXA-TÍTULO (modelo da imagem 1) — Introdução e fundamentos ==== */
+.introdução h3,
+.conclusão h3,
+[class^="antes"] h3 {
+    display: inline-block;
+    margin: 0;
+    padding: 14px 34px;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: var(--fonte-alt);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ==== INTRODUÇÃO e CONCLUSÃO (uma página cada, mesmo modelo, tudo centralizado) ==== */
+.corpo > .introdução,
+.corpo .conclusão {                 /* ".corpo" para ganhar da regra ".corpo > div" */
+    position: relative;
+    overflow: hidden;
+    min-height: var(--altura-pagina);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;            /* centraliza na horizontal */
+    justify-content: center;        /* centraliza na vertical */
+    gap: 36px;                      /* espaço entre a caixa do título e o texto */
+    padding: 0 var(--margem-pagina);
+    text-align: center;             /* troque por "left" para o texto ficar alinhado à esquerda */
+}
+
+.introdução p,
+.conclusão p {
+    margin: 0;
+    max-width: 78ch;
+    font-family: var(--fonte-alt);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #444444;
+}
+
+/* ==== DECORAÇÃO (formas coloridas) — introdução e conclusão ====
+   As formas ficam atrás do texto, nos cantos e nas faixas de cima e de baixo, e podem "sair" da página
+   (o overflow do bloco corta o que passa). Tamanhos em vw para acompanhar a largura da tela. */
+.deco {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;           /* não atrapalha cliques e seleção de texto */
+    overflow: hidden;
+}
+
+.deco img {
+    position: absolute;
+    display: block;
+    height: auto;
+    max-width: none;
+    user-select: none;
+}
+
+.introdução > :not(.deco),
+.conclusão > :not(.deco) {
+    position: relative;
+    z-index: 1;                     /* título e texto ficam por cima das formas */
+}
+
+/* ---- INTRODUÇÃO ---- */
+.introdução .f-estrela-amarela  { width: 22vw;  left: -5vw;  top: -6vw;     transform: rotate(-10deg); }
+.introdução .f-estrela-azul     { width: 15vw;  right: 3vw;  top: 8%;       transform: rotate(14deg);  }
+.introdução .f-estrela-vermelha { width: 13vw;  right: 14vw; bottom: -1vw;  transform: rotate(22deg);  }
+.introdução .f-quadrados        { width: 12vw;  left: 7vw;   bottom: 7%;   }
+.introdução .f-quadrado-verde   { width: 3.6vw; left: 33vw;  top: 8%;       }
+.introdução .f-quadrado-amarelo { width: 4.4vw; right: 6vw;  bottom: 20%;   }
+.introdução .f-circulo-amarelo  { width: 5vw;   left: 15vw;  bottom: 34%;   }
+.introdução .f-circulo-vermelho { width: 3vw;   right: 33vw; top: 9%;       }
+.introdução .f-circulo-azul     { width: 4vw;   right: 15vw; top: 36%;      }
+.introdução .f-rabisco          { width: 44vw;  left: 24vw;  bottom: 3%;    }
+
+/* ---- CONCLUSÃO (mesmas formas, outra disposição) ---- */
+.conclusão .f-estrela-vermelha  { width: 21vw;  right: -5vw; top: -5vw;     transform: rotate(16deg);  }
+.conclusão .f-estrela-amarela   { width: 19vw;  left: 3vw;   bottom: -7vw;  transform: rotate(24deg);  }
+.conclusão .f-estrela-azul      { width: 11vw;  left: 6vw;   top: 8%;       transform: rotate(-12deg); }
+.conclusão .f-quadrados         { width: 12vw;  right: 8vw;  bottom: 8%;    }
+.conclusão .f-quadrado-verde    { width: 3.6vw; right: 6vw;  top: 42%;      }
+.conclusão .f-quadrado-amarelo  { width: 4.4vw; left: 9vw;   top: 46%;      }
+.conclusão .f-circulo-amarelo   { width: 5vw;   left: 38vw;  top: 8%;       }
+.conclusão .f-circulo-azul      { width: 3vw;   right: 31vw; top: 13%;      }
+.conclusão .f-circulo-vermelho  { width: 4vw;   left: 28vw;  bottom: 6%;    }
+.conclusão .f-rabisco           { width: 44vw;  right: 24vw; top: -3%;      transform: scaleX(-1);     }
+
+/* ==== PÁGINAS ANTES / DEPOIS ==== */
+[class^="antes"],
+[class^="depois"] {
+    position: relative;
+    height: var(--altura-pagina);
+    scroll-snap-align: start;
+    padding: 44px var(--margem-pagina);
+    display: grid;
+    column-gap: clamp(24px, 5vw, 80px);
+    overflow: hidden;
+}
+
+/* ==== IMAGENS ====
+   A caixa assume a proporção --w / --h (definida por parte, mais abaixo)
+   e nunca passa da altura útil da página. Assim não sobra margem. */
+[class^="antes"] img,
+[class^="depois"] img {
+    display: block;
+    aspect-ratio: var(--w) / var(--h);
+    width: min(100%, calc(var(--altura-img) * var(--w) / var(--h)));
+    height: auto;
+    max-height: none;
+    object-fit: cover;          /* sem sobras, e sem cortes porque a proporção é a do arquivo */
+    box-shadow: 0 10px 30px rgba(36, 36, 36, 0.12);
+}
+
+/* Texto (caixa menor) — <div class="texto"> com vários <p> dentro */
+[class^="antes"] .texto,
+[class^="depois"] .texto {
+    min-height: 0;
+    overflow-y: auto;
+    color: #333333;
+    font-family: var(--fonte-alt);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    background-color: #ffffff;
+    border-left: 6px solid var(--cor-destaque);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    padding: 20px 24px;
+}
+
+.texto p { margin: 0 0 1em; }
+.texto p:last-child { margin-bottom: 0; }
+
+/* ---- Tamanho original de cada imagem (largura / altura em px) ---- */
+
+/* 1ª e 2ª */
+.primeiraParte [class^="antes"] img  { --w: 944;  --h: 556;  }
+.primeiraParte [class^="depois"] img { --w: 1673; --h: 940;  }
+
+/* 3ª e 4ª */
+.segundaParte [class^="antes"] img   { --w: 793;  --h: 1983; }
+.segundaParte [class^="depois"] img  { --w: 793;  --h: 1983; }
+
+/* 5ª e 6ª */
+.terceiraParte [class^="antes"] img  { --w: 1098; --h: 576;  }
+.terceiraParte [class^="depois"] img { --w: 1731; --h: 909;  }
+
+/* 7ª e 8ª */
+.quartaParte [class^="antes"] img    { --w: 2160; --h: 2180; }
+.quartaParte [class^="depois"] img   { --w: 2160; --h: 2180; }
+
+/* ---- ANTES (modelo da imagem 2) ----
+   título e subtítulo centralizados no topo da coluna esquerda,
+   caixa de texto embaixo, imagem grande à direita. */
+[class^="antes"] {
+    grid-template-columns: minmax(260px, 0.7fr) 1.6fr;
+    grid-template-rows: auto auto 1fr;
+    row-gap: 14px;
+}
+
+[class^="antes"] h3 {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: center;
+    background-color: var(--cor-destaque);   /* a caixa usa a cor do fundamento */
+}
+
+/* amarelo pede texto escuro para dar contraste */
+.terceiraParte [class^="antes"] h3 { color: #000000; }
+
+[class^="antes"] h4 {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    margin: 0;
+    font-family: var(--fonte-alt);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+    letter-spacing: 1px;
+    color: var(--cor-destaque);
+}
+
+[class^="antes"] .texto {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: end;
+    max-height: 100%;
+    max-width: 380px;
+}
+
+[class^="antes"] img {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+    justify-self: center;
+}
+
+/* ---- DEPOIS (modelo da imagem 3, mais horizontal) ---- */
+[class^="depois"] {
+    grid-template-columns: minmax(260px, 0.9fr) 1.6fr;
+    grid-template-rows: auto 1fr;
+}
+
+[class^="depois"] h4 {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    margin: 0 0 24px 0;
+    padding-bottom: 8px;
+    border-bottom: 4px solid var(--cor-destaque);
+    font-family: var(--fonte-alt);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+[class^="depois"] .texto {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+    max-height: 100%;
+}
+
+[class^="depois"] img {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    justify-self: center;
+}
+
+[class^="depois"]::after {
+    content: "";
+    position: absolute;
+    right: var(--margem-pagina);
+    bottom: 28px;
+    width: 56px;
+    height: 56px;
+    background-color: var(--cor-destaque);
+}
+
+/* ==== TODOS OS FUNDAMENTOS — ANTES e DEPOIS (layout especial, inspirado na revista) ====
+   Imagem grande à esquerda, usando a altura útil inteira (sem sobra de margem);
+   à direita, uma coluna só com título/subtítulo e texto, todos na mesma linha vertical. */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"],
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"] {
+    --fs-titulo: clamp(2.2rem, 4.5vw, 4.8rem);        /* tamanho do título "Proximidade" */
+    --larg-col: calc(var(--fs-titulo) * var(--em-titulo) - 10px);  /* largura da coluna da direita = largura do título */
+    --recuo-dir: clamp(20px, 3vw, 48px);              /* quanto a coluna da direita se afasta da borda direita */
+    --altura-img: calc(var(--altura-pagina) - 88px);  /* a imagem usa a altura útil inteira */
+    /* largura da imagem = altura x proporção, sem invadir a coluna da direita */
+    --larg-img: min(calc(var(--altura-img) * var(--w) / var(--h)),
+                    calc(100vw - 2 * var(--margem-pagina) - var(--recuo-dir) - var(--larg-col) - 32px));
+
+    --gap-ideal: clamp(48px, 6vw, 110px);             /* espaço desejado entre a imagem e o texto */
+    --livre: calc(100vw - 2 * var(--margem-pagina) - var(--recuo-dir) - var(--larg-img) - var(--larg-col));
+    --sobra: max(0px, calc((var(--livre) - var(--gap-ideal)) / 2));  /* recuo extra dos dois lados */
+
+    padding-left: calc(var(--margem-pagina) + var(--sobra));
+    padding-right: calc(var(--margem-pagina) + var(--recuo-dir) + var(--sobra));
+    justify-content: space-between;   /* o espaço que sobra fica entre a imagem e o texto */
+}
+
+/* tamanho original da imagem de cada página (largura / altura) */
+/* largura do título de cada fundamento, em "vezes o tamanho da fonte" (muda se você trocar o título) */
+.primeiraParte { --em-titulo: 7.06; }   /* PROXIMIDADE */
+.segundaParte  { --em-titulo: 7.39; }   /* ALINHAMENTO */
+.terceiraParte { --em-titulo: 6.22; }   /* CONTRASTE */
+.quartaParte   { --em-titulo: 5.83; }   /* REPETIÇÃO */
+
+/* tamanho original das imagens (largura / altura) */
+.primeiraParte [class^="antes"]  { --w: 944;  --h: 556;  }
+.primeiraParte [class^="depois"] { --w: 1673; --h: 940;  }
+.segundaParte  [class^="antes"],
+.segundaParte  [class^="depois"] { --w: 793;  --h: 1983; }
+.terceiraParte [class^="antes"]  { --w: 1098; --h: 576;  }
+.terceiraParte [class^="depois"] { --w: 1731; --h: 909;  }
+.quartaParte   [class^="antes"],
+.quartaParte   [class^="depois"] { --w: 2160; --h: 2180; }
+
+/* imagem: encostada na margem esquerda e centralizada na vertical (troque "center" por "end" para descer, ou "start" para subir) */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] img,
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"] img {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: center;
+    justify-self: start;
+}
+
+/* texto sem o quadrado, começando na mesma linha do título */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] .texto,
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"] .texto {
+    grid-column: 2;
+    align-self: start;
+    max-width: none;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border-left: none;   /* para voltar a barra azul: border-left: 6px solid var(--cor-destaque); padding-left: 24px; */
+}
+
+/* ---- ANTES (1ª página): título gigante + "antes" ---- */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] {
+    --h-sub: 2.2rem;                              /* altura da linha do "antes" */
+    grid-template-columns: var(--larg-img) max-content;   /* imagem | coluna do título */
+    grid-template-rows: var(--fs-titulo) var(--h-sub) 1fr;
+    row-gap: 10px;
+}
+
+/* o maior título (Proximidade) */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] h3 {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
+    padding: 0;
+    background: none;
+    color: #000000;                               /* troque por var(--cor-destaque) para título azul */
+    font-size: var(--fs-titulo);
+    line-height: 1;
+    letter-spacing: -1px;
+    white-space: nowrap;
+}
+
+/* a descrição "antes", logo abaixo do título (azul, sem itálico) */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] h4 {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    text-transform: uppercase;
+    font-style: normal;
+    white-space: nowrap;
+}
+
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] .texto {
+    grid-row: 3;
+    width: 0;                                     /* não "empurra" a largura da coluna... */
+    min-width: 100%;                              /* ...mas ocupa a coluna inteira (a do título) */
+}
+
+/* ---- DEPOIS (2ª página): sem título, então o subtítulo vira o destaque ---- */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"] {
+    grid-template-columns: var(--larg-img) var(--larg-col);
+    grid-template-rows: auto 1fr;
+    row-gap: 0;
+}
+
+/* subtítulo grande, azul e sublinhado, alinhado à esquerda com o texto */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"] h4 {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: start;
+    margin: 0 0 22px 0;
+    padding-bottom: 10px;
+    border-bottom: 5px solid var(--cor-destaque);
+    color: var(--cor-destaque);
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    line-height: 1.2;
+    letter-spacing: 1px;
+    font-style: normal;
+}
+
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"] .texto {
+    grid-row: 2;
+}
+
+/* sem bolinhas: também desliga o quadradinho colorido antigo das páginas "depois" */
+:is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"]::after {
+    content: none;
+}
+
+/* ==== LINK EM VOLTA DA IMAGEM (clicar abre a imagem em outra aba) ====
+   display: contents faz o <a> "sumir" da estrutura, então a imagem continua no lugar certo do grid */
+[class^="antes"] > a,
+[class^="depois"] > a {
+    display: contents;
+}
+
+[class^="antes"] img,
+[class^="depois"] img {
+    cursor: zoom-in;
+}
+
+[class^="antes"] a:focus-visible img,
+[class^="depois"] a:focus-visible img {
+    outline: 3px solid var(--cor-destaque);   /* destaque ao navegar pelo teclado (Tab) */
+    outline-offset: 4px;
+}
+
+/* ==== ANIMAÇÃO DE SCROLL (ativada pelo script.js via .in-view) ==== */
+[class^="antes"] img, [class^="depois"] img,
+[class^="antes"] h3, [class^="antes"] h4, [class^="depois"] h4,
+[class^="antes"] .texto, [class^="depois"] .texto {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[class^="antes"].in-view img, [class^="depois"].in-view img,
+[class^="antes"].in-view h3, [class^="antes"].in-view h4, [class^="depois"].in-view h4,
+[class^="antes"].in-view .texto, [class^="depois"].in-view .texto {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+[class^="antes"].in-view h3, [class^="depois"].in-view h4 { transition-delay: 0.15s; }
+[class^="antes"].in-view h4 { transition-delay: 0.22s; }
+[class^="antes"].in-view .texto, [class^="depois"].in-view .texto { transition-delay: 0.3s; }
+
+/* ==== RODAPÉ ==== */
+.rodape {
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding: 35px 0;
+    scroll-snap-align: end;
+    font-family: var(--fonte-alt);
+}
+
+.rodape h4 {
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* ==== RESPONSIVO ==== */
+@media (max-width: 768px) {
+    html {
+        scroll-snap-type: y proximity;
+    }
+
+    [class^="antes"],
+    [class^="depois"] {
+        height: auto;
+        min-height: var(--altura-pagina);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+    }
+
+    [class^="antes"] img,
+    [class^="depois"] img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: var(--w) / var(--h);
+    }
+
+    [class^="antes"] .texto {
+        max-width: none;
+    }
+
+    [class^="depois"]::after {
+        display: none;
+    }
+
+    /* formas decorativas mais leves no celular, para não atrapalhar a leitura */
+    .deco {
+        opacity: 0.35;
+    }
+
+    /* todos os fundamentos (antes e depois) no celular */
+    :is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"],
+    :is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"] {
+        padding-left: var(--margem-pagina);
+        padding-right: var(--margem-pagina);
+    }
+
+    :is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] h3,
+    :is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] h4,
+    :is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="depois"] h4 {
+        align-self: flex-start;
+    }
+
+    :is(.primeiraParte, .segundaParte, .terceiraParte, .quartaParte) [class^="antes"] .texto {
+        width: auto;
+        min-width: 0;
+    }
+}
